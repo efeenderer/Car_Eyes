@@ -1,0 +1,5 @@
+# Tüm dataset klasörünü ve içeriğini yoksay
+dataset/
+
+# Belirli bir dosyayı yoksay
+/codes/Dummy.py
