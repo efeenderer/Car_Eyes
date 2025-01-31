@@ -1,13 +1,5 @@
 
 
-
-
-
-
-
-
-
-
 path1 = r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\BDD100K_YOLO\train\images"
 
 path2 = r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\BDD100K_YOLO\train\labels"

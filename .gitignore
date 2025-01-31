@@ -1,5 +1,6 @@
-# Tüm dataset klasörünü ve içeriğini yoksay
+.gitignore
+
+
 dataset/
 
-# Belirli bir dosyayı yoksay
 /codes/Dummy.py
