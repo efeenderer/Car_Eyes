@@ -17,6 +17,6 @@ __path__ = getFilePath()
 
 if __name__ == '__main__': 
     multiprocessing.freeze_support()
-    model = YOLO("yolov8n.pt")
+    model = YOLO("yolov8n.yaml")
     data_path = __path__+r"\data.yaml"
     model.train(data=data_path,epochs=150,batch=16)
