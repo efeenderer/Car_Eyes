@@ -15,11 +15,11 @@ def UpperPath(path): #Upper folder of the argument "path"
 __path__ = getFilePath()    #Directory of the current file
 
 
-polygons_path = (r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\Mapillary\val\v2.0\polygons",
-                 r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\Mapillary\train\v2.0\polygons")
+polygons_path = (r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\Mapillary\val\v2.0\polygons"
+                 ,r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\Mapillary\train\v2.0\polygons")
 
-labels_path = (r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\Mapillary_YOLO\val\labels",
-               r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\Mapillary_YOLO\train\labels")
+labels_path = (r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\Mapillary_YOLO\val\labels"
+               ,r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\Mapillary_YOLO\train\labels")
 
 images_path = (r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\Mapillary_YOLO\val\images",
                r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\Mapillary_YOLO\train\images")
@@ -29,19 +29,15 @@ images_path = (r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\Mapi
 
 
 
-class_ids = {'road':0,
-             'traffic_light':1,
-             'traffic_sign':2,
-             'vehicle':3,
-             'person':4}
+class_ids = {'traffic_light':0,   #'road':0,
+             'traffic_sign':1,
+             'vehicle':2,
+             'person':3}
 
 map_classes = {                                 # After checking everything on the mapillary dataset, I used ChatGPT to match all these. I really didn't want to lose time on matching these.
                                                 # After a while (5 mins) I realised that I could've written a code that does this job too. traffic-light, traffic-sign ... THEY'RE ALREADY WRITTEN IN THE CLASS NAMES XD
-    'construction--flat--road': 'road',
-    'construction--flat--service-lane': 'road',
-    'construction--flat--driveway': 'road',
-    'construction--flat--parking': 'road',
-    'construction--flat--parking-aisle': 'road',
+                                                # I decided to delete the road annotations. I changed my mind to do an object detector at first than doing segmentation for every class.
+                                                # At first, I want to create a model that detecs traffic lights, traffic signs, vehicles and people.
    
     'object--traffic-light--general-upright': 'traffic_light',
     'object--traffic-light--general-horizontal': 'traffic_light',
@@ -96,8 +92,8 @@ def mapillary_to_yolo(polygons=polygons_path,labels=labels_path):
                 data = json.load(f)
             
             #print()
-            height = data['height']
-            width = data['width']
+            height_image = data['height']
+            width_image = data['width']
             TEXT = ""
             try:
                 for item in data['objects']:
@@ -105,19 +101,29 @@ def mapillary_to_yolo(polygons=polygons_path,labels=labels_path):
                         
                         id = class_ids[map_classes[item['label']]]
 
-                        line = f"{id} "
+                        TEXT += f"{id} "
 
-                        for coordinates in item['polygon']:
-                            x = coordinates[0]/width
-                            y = coordinates[1]/height
-                            line += f"{x} {y} "
+                        x = list()
+                        y = list()
 
-                        TEXT += line + "\n"
-
+                        for coordinates in item['polygon']:                        # Since I decided to make an object detector, I will not need polygons anymore. Thus, I had to get rid of them 
+                            x.append(coordinates[0])    
+                            y.append(coordinates[1])
                         
-                with open(TXT_path,'a+') as f:
-                    f.write(TEXT)
-                    
+                        height = max(y) - min(y) + 5  #I'm leaving a little margin on size.
+                        height /= height_image
+
+                        width = max(x) - min(x) + 5
+                        width /= width_image
+
+                        center_x, center_y = (max(x) + min(x)) / ( 2 * width_image ), (max(y) + min(y)) / ( 2 * height_image)
+
+                        TEXT += f"{center_x} {center_y} {width} {height}\n"
+
+                        with open(TXT_path, "w+") as f:
+                            f.write(TEXT)
+                        
+
                 print(f"{file_name}.txt is created {index + 1}/{length} ")
             except Exception as e:
                 print(f"An error occured creating {file_name}.txt   Error: {e}")
@@ -138,7 +144,9 @@ def check_files(labels=labels_path,images=images_path):
                     print(f"File couldn't have been created      Error: {e}")
 
 mapillary_to_yolo()
-check_files()
+#check_files()
+
+
 
 
 

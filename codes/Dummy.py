@@ -1,23 +1,28 @@
 
 
-path1 = r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\BDD100K_YOLO\train\images"
+path1 = r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\MainDataset\val\images"
 
-path2 = r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\BDD100K_YOLO\train\labels"
-
-error = r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\BDD100K_YOLO\train\errorcheck.txt"
+path2 = r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\MainDataset\val\labels"
 
 
 import os
+import cv2 as cv
+
+counter = 0
 
 labels = os.listdir(path2)
-i = 1
+
+names = set()
+
 for image in os.listdir(path1):
-    image_name = image.split('.')[-2]
-    txt = image_name+".txt"
-    if not txt in labels:
-        try:
-            os.remove(path1 + "\\" +image)
-            print(f"Removed {image}     {i}/137")
-            i = i + 1
-        except Exception as e:
-            print(f"There was an error deleting file:{image}     Error:{e}")
+    image_txt_name = image.split(".")[-2] + ".txt"
+    image_txt_path = os.path.join(path2,image_txt_name)
+    image_path = os.path.join(path1,image)
+
+    if not image_txt_name in labels:
+        counter += 1
+        with open(image_txt_path,'w'):
+            pass
+        print(image_txt_path)
+
+        

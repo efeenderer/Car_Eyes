@@ -29,9 +29,7 @@ def bdd_to_yolo(json_path, label_path=None):
     map_classes = {'traffic light': 'traffic_light',  # There were many classes in BDD100K dataset. I had to classify them.
                    'traffic sign': 'traffic_sign',    # At the end of this code, I created a set that checks all the classes in the BDD100K labels. And then I matched them to my classes:
                                                       #                                                                               0-Traffic Light, 1-Traffic Sign, 2-Vehicle, 3-Person
-                   'drivable area': 'road',
-                   'lane':'road',
-
+             
                    'bus':'vehicle',
                    'motor':'vehicle',
                    'train':'vehicle',
@@ -43,11 +41,10 @@ def bdd_to_yolo(json_path, label_path=None):
                    'rider':'person',
                    }
     
-    class_ids = {'road':0,
-                 'traffic_light':1,
-                 'traffic_sign':2,
-                 'vehicle':3,
-                 'person':4}
+    class_ids = {'traffic_light':0,
+                 'traffic_sign':1,
+                 'vehicle':2,
+                 'person':3}
     
     for index,item in enumerate(data):
         img_name = str(item['name'])
@@ -77,21 +74,9 @@ def bdd_to_yolo(json_path, label_path=None):
                         width = (x2 - x1) / 1280
                         height = (y2 - y1) / 720
                         TEXT = f"{id} {x_center} {y_center} {width} {height}"
-                        
-
-                    elif 'poly2d' in label:
-                        vertices = label['poly2d'][0]['vertices']
-                        TEXT = f"{id} "
-                        for coordinates in vertices:
-                            x, y = coordinates[0], coordinates[1]
-                            #print(f"{x} {y} ")
-                            x = x/1280
-                            y = y/720
-                            
-                            TEXT = TEXT + f"{x} {y} "
 
                     f.write(TEXT+"\n")
-        print(f"label {txt_file} is done.     {index}/{len(data)}")
+        print(f"label {txt_file} is done.     {index+1}/{len(data)}")
 
     
 json_path = r"E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\BDD100K\bdd100k_labels_release\bdd100k\labels\bdd100k_labels_images_train.json"

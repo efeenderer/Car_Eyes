@@ -2,6 +2,6 @@ path: E:\Python_Projeler\ComputerVisionProjects\Car_Eyes\dataset\MainDataset
 train: train/images
 val: val/images
 
-nc: 5
+nc: 4
 
-names: ['road','traffic_light','traffic_sign','vehicle','person']
+names: ['traffic_light','traffic_sign','vehicle','person']
