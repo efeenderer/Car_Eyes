@@ -67,9 +67,9 @@ def display_window():
 
 if __name__ == "__main__":
     if torch.cuda.is_available():
-        eyes = YOLO(r"E:\Python_Projeler\ComputerVisionProjects\runs\detect\train\weights\best.pt").to('cuda')
+        eyes = YOLO(UpperPath(UpperPath(__path__)) + r"\car_eyes.pt").to('cuda')
     else:
-        eyes = YOLO(r"E:\Python_Projeler\ComputerVisionProjects\runs\detect\train\weights\best.pt")
+        eyes = YOLO(UpperPath(UpperPath(__path__)) + r"\car_eyes.pt")
     
     display_window()
 
