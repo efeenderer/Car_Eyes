@@ -19,4 +19,4 @@ if __name__ == '__main__':
     multiprocessing.freeze_support()
     model = YOLO("yolov8n.yaml")
     data_path = __path__+r"\data.yaml"
-    model.train(data=data_path,epochs=150,batch=16)
+    model.train(data=data_path,epochs=15,batch=-1)
